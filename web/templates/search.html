@@ -8,7 +8,7 @@
     />
   </head>
   <body>
-    <div class="text-center container-sm m-5">
+    <div class="container-sm mt-5 m-6">
       <form action="/search" method="get">
         <input
           type="text"
@@ -19,7 +19,19 @@
         />
       </form>
       {{if .query}}
-      <h2>Vos résultats de recherche</h2>
+      <div class="text-center">
+        <h2>Résultats de recherche</h2>
+      </div>
+      <div>
+        <ul class="list-unstyled">
+          {{range .results}}
+          <li>
+            <a href="{{ .Link }}"><div>{{ .Title }}</div></a>
+            <p>{{ .Description }}</p>
+          </li>
+          {{end}}
+        </ul>
+      </div>
       {{end}}
     </div>
   </body>

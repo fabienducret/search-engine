@@ -1,7 +1,6 @@
 package server
 
 import (
-	"fmt"
 	"html/template"
 	"net/http"
 	"path"
@@ -20,14 +19,13 @@ func New(engine domain.Engine) *http.ServeMux {
 
 func searchHandlerFactory(engine domain.Engine) func(w http.ResponseWriter, r *http.Request) {
 	return func(w http.ResponseWriter, r *http.Request) {
-		p := path.Join("web", "templates", "search.html")
-		t, _ := template.ParseFiles(p)
+		t, _ := template.ParseFiles(path.Join("web", "templates", "search.html"))
 
 		query := r.URL.Query().Get("q")
 
-		fmt.Println(engine.Search(query))
+		results := engine.Search(query)
 
-		injectedParams := map[string]interface{}{"query": query}
+		injectedParams := map[string]interface{}{"query": query, "results": results}
 
 		t.Execute(w, injectedParams)
 	}

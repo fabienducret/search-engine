@@ -1,5 +1,5 @@
 package domain
 
 type Provider interface {
-	Search(q string) string
+	Search(q string) []SearchResult
 }
