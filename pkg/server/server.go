@@ -5,6 +5,7 @@ import (
 	"net/http"
 	"path"
 	"searchengine/pkg/domain"
+	"searchengine/pkg/viewmodel"
 )
 
 func New(engine domain.Engine) *http.ServeMux {
@@ -23,10 +24,9 @@ func searchHandlerFactory(engine domain.Engine) func(w http.ResponseWriter, r *h
 
 		query := r.URL.Query().Get("q")
 
-		results := engine.Search(query)
+		searchResults := engine.Search(query)
+		response := viewmodel.Response(query, searchResults)
 
-		injectedParams := map[string]interface{}{"query": query, "results": results}
-
-		t.Execute(w, injectedParams)
+		t.Execute(w, response)
 	}
 }
