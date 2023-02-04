@@ -1,5 +1,7 @@
 package domain
 
+import "sync"
+
 type Engine struct {
 	providers []Provider
 }
@@ -9,14 +11,24 @@ func NewEngine(providers []Provider) Engine {
 }
 
 func (e Engine) Search(query string) []SearchResult {
-	var searchResults []SearchResult
-	providers := e.providers
+	return e.searchInParallel(query)
+}
 
-	// should be in parallel
-	for _, p := range providers {
-		resultsForProvider := p.Search(query)
-		searchResults = append(searchResults, resultsForProvider...)
+func (e Engine) searchInParallel(query string) []SearchResult {
+	var searchResults []SearchResult
+	wg := sync.WaitGroup{}
+
+	for _, p := range e.providers {
+		wg.Add(1)
+
+		go func(p Provider) {
+			defer wg.Done()
+
+			results := p.Search(query)
+			searchResults = append(searchResults, results...)
+		}(p)
 	}
+	wg.Wait()
 
 	return searchResults
 }
