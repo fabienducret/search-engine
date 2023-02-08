@@ -13,9 +13,11 @@ type Google struct {
 	HttpClient net.HttpClient
 }
 
+const GOOGLE_URL = "https://google.com/search"
+
 func (p Google) Search(query string) []domain.SearchResult {
 	var results []domain.SearchResult
-	res, _ := p.HttpClient.DoCall(fmt.Sprintf("http://google.com/search?q=%s", query))
+	res, _ := p.HttpClient.DoCall(fmt.Sprintf("%s?q=%s", GOOGLE_URL, query))
 
 	document, _ := goquery.NewDocumentFromReader(res.Body)
 	elements := document.Find("div.g")
@@ -23,32 +25,21 @@ func (p Google) Search(query string) []domain.SearchResult {
 	for index := range elements.Nodes {
 		item := elements.Eq(index)
 
-		results = append(results, domain.SearchResult{
-			Title:       titleFrom(item),
-			Description: descriptionFrom(item),
-			Link:        linkFrom(item),
-			From:        "Google",
-		})
+		results = append(results, googleParsing(item))
 	}
 
 	return results
 }
 
-func linkFrom(item *goquery.Selection) string {
-	a := item.Find("a")
-	return strings.TrimSpace(a.AttrOr("href", ""))
-}
+func googleParsing(item *goquery.Selection) domain.SearchResult {
+	link := strings.TrimSpace(item.Find("a").AttrOr("href", ""))
+	title, _ := item.Find("h3").First().Html()
+	description, _ := item.Find(".VwiC3b").Html()
 
-func titleFrom(item *goquery.Selection) string {
-	selector := item.Find("h3").First()
-	title, _ := selector.Html()
-
-	return title
-}
-
-func descriptionFrom(item *goquery.Selection) string {
-	selector := item.Find(".VwiC3b")
-	description, _ := selector.Html()
-
-	return description
+	return domain.SearchResult{
+		Title:       title,
+		Description: description,
+		Link:        link,
+		From:        "Google",
+	}
 }

@@ -3,6 +3,7 @@ package server
 import (
 	"html/template"
 	"net/http"
+	"net/url"
 	"path"
 	"searchengine/pkg/domain"
 	"searchengine/pkg/viewmodel"
@@ -22,7 +23,7 @@ func searchHandlerFactory(engine domain.Engine) func(w http.ResponseWriter, r *h
 	return func(w http.ResponseWriter, r *http.Request) {
 		t, _ := template.ParseFiles(path.Join("web", "templates", "search.html"))
 
-		query := r.URL.Query().Get("q")
+		query := url.QueryEscape(r.URL.Query().Get("q"))
 
 		searchResults := engine.Search(query)
 		response := viewmodel.Response(query, searchResults)

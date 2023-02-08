@@ -65,5 +65,5 @@ Run the command :
 This project is under construct. Here is the roadmap :
 
 - [x] Add come from provider in search results
-- [ ] Add Bing as provider
+- [x] Add Bing as provider
 - [ ] Add DuckDuckGo as provider

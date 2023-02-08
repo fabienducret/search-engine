@@ -1,19 +1,45 @@
 package providers
 
 import (
+	"fmt"
 	"searchengine/pkg/domain"
 	"searchengine/pkg/net"
+	"strings"
+
+	"github.com/PuerkitoBio/goquery"
 )
 
 type Bing struct {
 	HttpClient net.HttpClient
 }
 
-func (p Bing) Search(q string) []domain.SearchResult {
-	return []domain.SearchResult{{
-		Title:       "Fake title",
-		Description: "Fake description",
-		Link:        "www.google.com",
+const BING_URL = "https://www.bing.com/search"
+
+func (p Bing) Search(query string) []domain.SearchResult {
+	var results []domain.SearchResult
+	res, _ := p.HttpClient.DoCall(fmt.Sprintf("%s?q=%s", BING_URL, query))
+
+	document, _ := goquery.NewDocumentFromReader(res.Body)
+	elements := document.Find("li.b_algo")
+
+	for index := range elements.Nodes {
+		item := elements.Eq(index)
+
+		results = append(results, bingParsing(item))
+	}
+
+	return results
+}
+
+func bingParsing(item *goquery.Selection) domain.SearchResult {
+	link := strings.TrimSpace(item.Find("a").AttrOr("href", ""))
+	title, _ := item.Find("h2").Find("a").Html()
+	description, _ := item.Find("p.b_lineclamp2").Html()
+
+	return domain.SearchResult{
+		Title:       title,
+		Description: description,
+		Link:        link,
 		From:        "Bing",
-	}}
+	}
 }
