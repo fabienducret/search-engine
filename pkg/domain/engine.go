@@ -13,9 +13,7 @@ func NewEngine(providers []Provider) Engine {
 func (e Engine) Search(query string) []SearchResult {
 	searchResults := e.resultsFromProviders(query)
 
-	// TODO tri, fusion
-
-	return searchResults
+	return removeDuplicateLinks(searchResults)
 }
 
 func (e Engine) resultsFromProviders(query string) []SearchResult {
@@ -27,4 +25,26 @@ func (e Engine) resultsFromProviders(query string) []SearchResult {
 	})
 
 	return searchResults
+}
+
+func removeDuplicateLinks(toDeduplicate []SearchResult) []SearchResult {
+	var searchResults []SearchResult
+
+	for _, s := range toDeduplicate {
+		if !contains(searchResults, s.Link) {
+			searchResults = append(searchResults, s)
+		}
+	}
+
+	return searchResults
+}
+
+func contains(searchResults []SearchResult, link string) bool {
+	for _, s := range searchResults {
+		if s.Link == link {
+			return true
+		}
+	}
+
+	return false
 }
