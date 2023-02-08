@@ -8,22 +8,62 @@ The purpose is not to build something unique or valuable but to learn.
 
 ## How to use
 
-TBD
+Run the command :
+
+`go run cmd/main.go`
+
+Then browse this URL : http://localhost:3333/
 
 ## Structure
 
-TBD
+```
+project
+│   README.md
+|   go.mod
+|   go.sum
+│
+└───cmd
+│   │   main.go
+│
+└───pkg
+│   └───async
+│   |   │   range.go
+│   |
+│   └───domain
+│   |   │   engine_test.go
+│   |   │   engine.go
+│   |   │   provider.go
+│   |   │   searchresult.go
+│   |   │   range.go
+│   |
+│   └───net
+│   |   │   http-client.go
+│   |
+│   └───providers
+│   |   │   bing.go
+│   |   │   google.go
+│   |
+│   └───server
+│   |   │   server.go
+│   |
+│   └───viewmodel
+│   |   │   response.go
+│
+└───web
+│   └───templates
+│   |   │   search.html
+```
 
 ## Tests
 
-Command to run the tests :
+Run the command :
 
-`go test ./...  `
+`go test ./... `
 
-## Planning
+## Roadmap
 
-This project is under construct.
+This project is under construct. Here is the roadmap :
 
-- [ ] Add come from provider in search results
+- [x] Add come from provider in search results
 - [ ] Add Bing as provider
 - [ ] Add DuckDuckGo as provider
