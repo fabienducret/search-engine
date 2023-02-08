@@ -14,5 +14,6 @@ func (p Bing) Search(q string) []domain.SearchResult {
 		Title:       "Fake title",
 		Description: "Fake description",
 		Link:        "www.google.com",
+		From:        "Bing",
 	}}
 }

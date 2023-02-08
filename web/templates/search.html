@@ -26,8 +26,13 @@
         <ul class="list-unstyled">
           {{range .results}}
           <li>
-            <a href="{{ .Link }}"><div>{{ .Title }}</div></a>
+            <hr />
+            <p>
+              <a href="{{ .Link }}"><span>{{ .Title }}</span></a> -
+              <i class="text-truncate">{{ .Link }}</i>
+            </p>
             <p>{{ .Description }}</p>
+            <p><i>{{ .From }}</i></p>
           </li>
           {{end}}
         </ul>

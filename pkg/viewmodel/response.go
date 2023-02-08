@@ -9,6 +9,7 @@ type searchResult struct {
 	Title       string
 	Description template.HTML
 	Link        string
+	From        string
 }
 
 func Response(query string, searchResults []domain.SearchResult) map[string]interface{} {
@@ -19,6 +20,7 @@ func Response(query string, searchResults []domain.SearchResult) map[string]inte
 			Title:       res.Title,
 			Link:        res.Link,
 			Description: template.HTML(res.Description),
+			From:        res.From,
 		})
 	}
 

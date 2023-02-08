@@ -27,6 +27,7 @@ func (p Google) Search(query string) []domain.SearchResult {
 			Title:       titleFrom(item),
 			Description: descriptionFrom(item),
 			Link:        linkFrom(item),
+			From:        "Google",
 		})
 	}
 
