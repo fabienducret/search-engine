@@ -2,11 +2,11 @@ FROM golang:1.20.2-bullseye
 
 WORKDIR /app
 
-COPY go.* .
+COPY go.* ./
 
 RUN go mod download
 
-COPY . .
+COPY . ./
 
 RUN go build -o /search-engine ./cmd/main.go
 
