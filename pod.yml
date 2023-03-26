@@ -1,0 +1,12 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: search-engine
+  labels:
+    app: search-engine
+spec:
+  containers:
+    - image: gcr.io/searchengine-381606/search-engine:1
+      name: search-engine
+      ports:
+        - containerPort: 8080
