@@ -18,8 +18,8 @@ env:
   PROJECT_ID: ${{ secrets.GKE_PROJECT }}
   GKE_CLUSTER: go-search-engine-cluster # Add your cluster name here.
   GKE_ZONE: us-central1-a # Add your cluster zone here.
-  DEPLOYMENT_NAME: search-engine-service # Add your deployment name here.
-  IMAGE: static-site
+  DEPLOYMENT_NAME: search-engine # Add your deployment name here.
+  IMAGE: search-engine
 
 jobs:
   setup-build-publish-deploy:

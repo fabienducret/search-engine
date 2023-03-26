@@ -1,0 +1,5 @@
+commonLabels:
+  app: search-engine
+resources:
+  - deployment.yml
+  - service.yml
