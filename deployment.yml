@@ -1,0 +1,21 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: search-engine
+  labels:
+    app: search-engine
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: search-engine
+  template:
+    metadata:
+      labels:
+        app: search-engine
+    spec:
+      containers:
+        - name: search-engine
+          image: gcr.io/searchengine-381606/search-engine:1
+          ports:
+            - containerPort: 8080
