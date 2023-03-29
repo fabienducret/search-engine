@@ -2,6 +2,7 @@ package providers
 
 import (
 	"fmt"
+	"log"
 	"searchengine/pkg/domain"
 	"searchengine/pkg/net"
 	"strings"
@@ -17,7 +18,11 @@ const BING_URL = "https://www.bing.com/search"
 
 func (p Bing) Search(query string) []domain.SearchResult {
 	var results []domain.SearchResult
-	res, _ := p.HttpClient.DoCall(fmt.Sprintf("%s?q=%s", BING_URL, query))
+	res, err := p.HttpClient.DoCall(fmt.Sprintf("%s?q=%s", BING_URL, query))
+
+	if err != nil {
+		log.Println(err)
+	}
 
 	document, _ := goquery.NewDocumentFromReader(res.Body)
 	elements := document.Find("li.b_algo")

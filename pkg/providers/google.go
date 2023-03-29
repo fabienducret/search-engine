@@ -2,6 +2,7 @@ package providers
 
 import (
 	"fmt"
+	"log"
 	"searchengine/pkg/domain"
 	"searchengine/pkg/net"
 	"strings"
@@ -17,7 +18,11 @@ const GOOGLE_URL = "https://google.com/search"
 
 func (p Google) Search(query string) []domain.SearchResult {
 	var results []domain.SearchResult
-	res, _ := p.HttpClient.DoCall(fmt.Sprintf("%s?q=%s", GOOGLE_URL, query))
+	res, err := p.HttpClient.DoCall(fmt.Sprintf("%s?q=%s", GOOGLE_URL, query))
+
+	if err != nil {
+		log.Println(err)
+	}
 
 	document, _ := goquery.NewDocumentFromReader(res.Body)
 	elements := document.Find("div.g")
