@@ -24,8 +24,12 @@ func searchHandlerFactory(engine domain.Engine) func(w http.ResponseWriter, r *h
 		t, _ := template.ParseFiles(path.Join("web", "templates", "search.html"))
 
 		query := url.QueryEscape(r.URL.Query().Get("q"))
+		var searchResults []domain.SearchResult
 
-		searchResults := engine.Search(query)
+		if query != "" {
+			searchResults = engine.Search(query)
+		}
+
 		response := viewmodel.Response(query, searchResults)
 
 		t.Execute(w, response)

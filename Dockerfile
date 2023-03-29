@@ -9,9 +9,10 @@ COPY ./ ./
 
 RUN go build -o /app/search-engine ./cmd
 
-FROM gcr.io/distroless/static AS final
+FROM scratch AS final
 
 WORKDIR /app
+COPY --from=builder /etc/ssl/certs/ca-certificates.crt /etc/ssl/certs/ca-certificates.crt
 COPY --from=builder /app ./
 
 EXPOSE 8080
