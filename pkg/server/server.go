@@ -1,37 +1,34 @@
 package server
 
 import (
-	"html/template"
+	"fmt"
+	"log"
 	"net/http"
-	"net/url"
-	"path"
 	"searchengine/pkg/domain"
-	"searchengine/pkg/viewmodel"
 )
 
-func New(engine domain.Engine) *http.ServeMux {
-	server := http.NewServeMux()
+const port = "8080"
 
-	searchHandler := searchHandlerFactory(engine)
-	server.HandleFunc("/", searchHandler)
-	server.HandleFunc("/search", searchHandler)
-
-	return server
+type Server struct {
+	Engine domain.Engine
 }
 
-func searchHandlerFactory(engine domain.Engine) func(w http.ResponseWriter, r *http.Request) {
-	return func(w http.ResponseWriter, r *http.Request) {
-		t, _ := template.ParseFiles(path.Join("web", "templates", "search.html"))
+func New(engine domain.Engine) *Server {
+	return &Server{
+		Engine: engine,
+	}
+}
 
-		query := url.QueryEscape(r.URL.Query().Get("q"))
-		var searchResults []domain.SearchResult
+func (s *Server) Start() {
+	log.Printf("starting server on port %s\n", port)
 
-		if query != "" {
-			searchResults = engine.Search(query)
-		}
+	server := &http.Server{
+		Addr:    fmt.Sprintf(":%s", port),
+		Handler: s.Routes(),
+	}
 
-		response := viewmodel.Response(query, searchResults)
-
-		t.Execute(w, response)
+	err := server.ListenAndServe()
+	if err != nil {
+		log.Panic(err)
 	}
 }

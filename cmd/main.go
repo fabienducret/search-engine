@@ -1,8 +1,6 @@
 package main
 
 import (
-	"log"
-	"net/http"
 	"searchengine/pkg/domain"
 	"searchengine/pkg/net"
 	"searchengine/pkg/providers"
@@ -10,8 +8,7 @@ import (
 )
 
 func main() {
-	engine := engine()
-	log.Fatal(http.ListenAndServe(":8080", server.New(engine)))
+	server.New(engine()).Start()
 }
 
 func engine() domain.Engine {
