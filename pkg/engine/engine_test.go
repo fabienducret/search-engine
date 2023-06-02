@@ -1,22 +1,23 @@
-package domain_test
+package engine_test
 
 import (
-	"searchengine/pkg/domain"
+	"searchengine/pkg/engine"
+	"searchengine/pkg/entities"
 	"testing"
 )
 
 type FirstFakeProvider struct{}
 
-func (p FirstFakeProvider) Search(q string) []domain.SearchResult {
-	return []domain.SearchResult{
+func (p FirstFakeProvider) Search(q string) []entities.SearchResult {
+	return []entities.SearchResult{
 		{Title: "fake first title", Description: "fake first description", Link: "www.firstlink.com"},
 	}
 }
 
 type SecondFakeProvider struct{}
 
-func (p SecondFakeProvider) Search(q string) []domain.SearchResult {
-	return []domain.SearchResult{
+func (p SecondFakeProvider) Search(q string) []entities.SearchResult {
+	return []entities.SearchResult{
 		{Title: "fake second title", Description: "fake second description", Link: "www.secondlink.com"},
 		{Title: "fake third title", Description: "fake third description", Link: "www.thirstlink.com"},
 	}
@@ -24,8 +25,8 @@ func (p SecondFakeProvider) Search(q string) []domain.SearchResult {
 
 type ThirdFakeProvider struct{}
 
-func (p ThirdFakeProvider) Search(q string) []domain.SearchResult {
-	return []domain.SearchResult{
+func (p ThirdFakeProvider) Search(q string) []entities.SearchResult {
+	return []entities.SearchResult{
 		{Title: "fake third title", Description: "fake third description", Link: "www.thirstlink.com"},
 		{Title: "fake first title", Description: "fake first description", Link: "www.firstlink.com"},
 	}
@@ -35,7 +36,7 @@ func TestEngine(t *testing.T) {
 	t.Run("aggregates search results", func(t *testing.T) {
 		// Given
 		want := 3
-		engine := domain.NewEngine([]domain.Provider{
+		engine := engine.NewEngine([]engine.Provider{
 			FirstFakeProvider{},
 			SecondFakeProvider{},
 		})
@@ -51,7 +52,7 @@ func TestEngine(t *testing.T) {
 	t.Run("aggregates and deduplicates search results", func(t *testing.T) {
 		// Given
 		want := 3
-		engine := domain.NewEngine([]domain.Provider{
+		engine := engine.NewEngine([]engine.Provider{
 			FirstFakeProvider{},
 			SecondFakeProvider{},
 			ThirdFakeProvider{},

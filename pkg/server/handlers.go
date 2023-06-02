@@ -5,7 +5,7 @@ import (
 	"net/http"
 	"net/url"
 	"path"
-	"searchengine/pkg/domain"
+	"searchengine/pkg/entities"
 	"searchengine/pkg/viewmodel"
 )
 
@@ -19,12 +19,12 @@ func (s *Server) Routes() *http.ServeMux {
 	return mux
 }
 
-func searchHandlerFactory(engine domain.Engine) func(w http.ResponseWriter, r *http.Request) {
+func searchHandlerFactory(engine Engine) func(w http.ResponseWriter, r *http.Request) {
 	return func(w http.ResponseWriter, r *http.Request) {
 		t, _ := template.ParseFiles(path.Join("web", "templates", "search.html"))
 
 		query := url.QueryEscape(r.URL.Query().Get("q"))
-		var searchResults []domain.SearchResult
+		var searchResults []entities.SearchResult
 
 		if query != "" {
 			searchResults = engine.Search(query)

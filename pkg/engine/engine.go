@@ -1,6 +1,9 @@
-package domain
+package engine
 
-import "searchengine/pkg/async"
+import (
+	"searchengine/pkg/async"
+	"searchengine/pkg/entities"
+)
 
 type Engine struct {
 	providers []Provider
@@ -10,14 +13,14 @@ func NewEngine(providers []Provider) Engine {
 	return Engine{providers: providers}
 }
 
-func (e Engine) Search(query string) []SearchResult {
+func (e Engine) Search(query string) []entities.SearchResult {
 	searchResults := e.resultsFromProviders(query)
 
 	return removeDuplicateLinks(searchResults)
 }
 
-func (e Engine) resultsFromProviders(query string) []SearchResult {
-	var searchResults []SearchResult
+func (e Engine) resultsFromProviders(query string) []entities.SearchResult {
+	var searchResults []entities.SearchResult
 
 	async.Range(e.providers, func(p Provider) {
 		resultsForProvider := p.Search(query)
@@ -27,8 +30,8 @@ func (e Engine) resultsFromProviders(query string) []SearchResult {
 	return searchResults
 }
 
-func removeDuplicateLinks(toDeduplicate []SearchResult) []SearchResult {
-	var searchResults []SearchResult
+func removeDuplicateLinks(toDeduplicate []entities.SearchResult) []entities.SearchResult {
+	var searchResults []entities.SearchResult
 
 	for _, s := range toDeduplicate {
 		if !contains(searchResults, s.Link) {
@@ -39,7 +42,7 @@ func removeDuplicateLinks(toDeduplicate []SearchResult) []SearchResult {
 	return searchResults
 }
 
-func contains(searchResults []SearchResult, link string) bool {
+func contains(searchResults []entities.SearchResult, link string) bool {
 	for _, s := range searchResults {
 		if s.Link == link {
 			return true

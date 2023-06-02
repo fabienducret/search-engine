@@ -3,7 +3,7 @@ package providers
 import (
 	"fmt"
 	"log"
-	"searchengine/pkg/domain"
+	"searchengine/pkg/entities"
 	"searchengine/pkg/net"
 	"strings"
 
@@ -16,8 +16,8 @@ type Bing struct {
 
 const BING_URL = "https://www.bing.com/search"
 
-func (p Bing) Search(query string) []domain.SearchResult {
-	var results []domain.SearchResult
+func (p Bing) Search(query string) []entities.SearchResult {
+	var results []entities.SearchResult
 	res, err := p.HttpClient.DoCall(fmt.Sprintf("%s?q=%s", BING_URL, query))
 
 	if err != nil {
@@ -36,12 +36,12 @@ func (p Bing) Search(query string) []domain.SearchResult {
 	return results
 }
 
-func bingParsing(item *goquery.Selection) domain.SearchResult {
+func bingParsing(item *goquery.Selection) entities.SearchResult {
 	link := strings.TrimSpace(item.Find("a").AttrOr("href", ""))
 	title, _ := item.Find("h2").Find("a").Html()
 	description, _ := item.Find("p.b_lineclamp2").Html()
 
-	return domain.SearchResult{
+	return entities.SearchResult{
 		Title:       title,
 		Description: description,
 		Link:        link,

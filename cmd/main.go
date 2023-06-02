@@ -1,19 +1,19 @@
 package main
 
 import (
-	"searchengine/pkg/domain"
+	"searchengine/pkg/engine"
 	"searchengine/pkg/net"
 	"searchengine/pkg/providers"
 	"searchengine/pkg/server"
 )
 
 func main() {
-	server.New(engine()).Start()
+	server.New(buildEngine()).Start()
 }
 
-func engine() domain.Engine {
+func buildEngine() engine.Engine {
 	httpClient := net.HttpClient{}
-	engine := domain.NewEngine([]domain.Provider{
+	return engine.NewEngine([]engine.Provider{
 		providers.Google{
 			HttpClient: httpClient,
 		},
@@ -21,6 +21,4 @@ func engine() domain.Engine {
 			HttpClient: httpClient,
 		},
 	})
-
-	return engine
 }

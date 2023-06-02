@@ -4,16 +4,15 @@ import (
 	"fmt"
 	"log"
 	"net/http"
-	"searchengine/pkg/domain"
 )
 
 const port = "8080"
 
 type Server struct {
-	Engine domain.Engine
+	Engine Engine
 }
 
-func New(engine domain.Engine) *Server {
+func New(engine Engine) *Server {
 	return &Server{
 		Engine: engine,
 	}

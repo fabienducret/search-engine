@@ -2,7 +2,7 @@ package viewmodel
 
 import (
 	"html/template"
-	"searchengine/pkg/domain"
+	"searchengine/pkg/entities"
 )
 
 type searchResult struct {
@@ -12,7 +12,7 @@ type searchResult struct {
 	From        string
 }
 
-func Response(query string, searchResults []domain.SearchResult) map[string]interface{} {
+func Response(query string, searchResults []entities.SearchResult) map[string]interface{} {
 	var results []searchResult
 
 	for _, res := range searchResults {
